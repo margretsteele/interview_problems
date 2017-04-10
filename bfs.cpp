@@ -60,4 +60,3 @@ int main()
         if(list.size()) std::cout << "]\n\n";
     }
 }
-
