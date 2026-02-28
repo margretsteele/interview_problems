@@ -2,13 +2,10 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <algorithm>
-#include <iterator>
-#include <random>
 
 using namespace std;
 
-bool isAnagram(string a, string b) {
+bool isAnagram(const string& a, const string& b) {
     std::vector<int> res(26);
     for(auto& character : a) {
         int index = character - 'a';
@@ -19,7 +16,7 @@ bool isAnagram(string a, string b) {
         int index = character - 'a';
         res[index]--;
     }
-    
+
     for(auto& value : res) {
         if(value != 0) return false;
     }
@@ -27,25 +24,25 @@ bool isAnagram(string a, string b) {
 }
 
 struct Bucket {
-    Bucket(string& a) {
+    Bucket(const string& a) {
         insert(a);
     }
-    
-    bool doesThisBelong(string& a) {
+
+    bool doesThisBelong(const string& a) const {
         if(values.empty()) return true;
         return isAnagram(*values.begin(), a);
     }
-    
-    void insert(string& a) {
+
+    void insert(const string& a) {
         values.push_back(a);
     }
-    
-    void output() {
+
+    void output() const {
         for(auto& value : values) {
             cout << value << ' ';
         }
     }
-    
+
     private:
         vector<string> values;
 };
@@ -57,6 +54,7 @@ void sort(vector<string>& strings, vector<Bucket>& buckets) {
             if(bucket.doesThisBelong(value)) {
                 bucket.insert(value);
                 inserted = true;
+                break;
             }
         }
         if(!inserted) {
@@ -71,7 +69,7 @@ int main()
     vector<string> v = {"oliverqueen"s, "noliverquee"s, "barryallen"s, "allenbarry"s, "cat"s, "tac"s, "butthole", "holebutt"s, "fog"s, "gof"s, "bat"s, "tab"s };
 
     sort(v, res);
-    
+
     for(auto& bucket : res) {
         bucket.output();
         cout << "\n\n";
