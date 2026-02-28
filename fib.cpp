@@ -1,14 +1,16 @@
 #include <iostream>
-#include <string>
 
 int fib(int num) {
-    if(num == 0) {
-        return 0;
+    if (num <= 0) return 0;
+    if (num == 1) return 1;
+
+    int prev = 0, curr = 1;
+    for (int i = 2; i <= num; i++) {
+        int next = prev + curr;
+        prev = curr;
+        curr = next;
     }
-    if(num == 1) {
-        return 1;
-    }
-    return fib(num-1) + fib(num-2);
+    return curr;
 }
 
 int main()
