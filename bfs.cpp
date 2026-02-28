@@ -1,10 +1,8 @@
 // Example program
 #include <iostream>
-#include <string>
 #include <memory>
 #include <list>
 #include <vector>
-#include <ostream>
 
 struct Node{
     Node(char val) : left(nullptr), right(nullptr), value(val) {}
@@ -18,20 +16,22 @@ using VList = std::vector<ListPtrs>;
 
 VList createLists(std::shared_ptr<Node> root) {
     VList lists;
+    if (!root) return lists;
     lists.push_back(ListPtrs{root});
     for(std::size_t i = 0; i < lists.size(); i++) {
-        if(lists[i].size()) {
-            lists.push_back(ListPtrs());
-        }
+        ListPtrs nextLevel;
         for(auto& node : lists[i]) {
             if(node->left != nullptr)
             {
-                lists[i+1].push_back(node->left);
+                nextLevel.push_back(node->left);
             }
             if(node->right != nullptr)
             {
-                lists[i+1].push_back(node->right);
+                nextLevel.push_back(node->right);
             }
+        }
+        if(!nextLevel.empty()) {
+            lists.push_back(std::move(nextLevel));
         }
     }
     return lists;
@@ -39,24 +39,32 @@ VList createLists(std::shared_ptr<Node> root) {
 
 int main()
 {
-    std::shared_ptr<Node> root(new Node('a'));
-    root->left.reset(new Node('b'));
-    root->right.reset(new Node('c'));
+    auto root = std::make_shared<Node>('a');
+    root->left = std::make_shared<Node>('b');
+    root->right = std::make_shared<Node>('c');
 
-    root->left->left.reset(new Node('d'));
-    root->left->right.reset(new Node('e'));
+    root->left->left = std::make_shared<Node>('d');
+    root->left->right = std::make_shared<Node>('e');
 
-    root->right->left.reset(new Node('f'));
-    root->right->right.reset(new Node('g'));
+    root->right->left = std::make_shared<Node>('f');
+    root->right->right = std::make_shared<Node>('g');
 
-    root->left->right->left.reset(new Node('h'));
+    root->left->right->left = std::make_shared<Node>('h');
+
+    std::cout << "        " << root->value << "\n";
+    std::cout << "       / \\\n";
+    std::cout << "      " << root->left->value << "   " << root->right->value << "\n";
+    std::cout << "     / \\ / \\\n";
+    std::cout << "    " << root->left->left->value << "  " << root->left->right->value << " " << root->right->left->value << "  " << root->right->right->value << "\n";
+    std::cout << "       /\n";
+    std::cout << "      " << root->left->right->left->value << "\n\n";
 
     VList result = createLists(root);
     for(auto& list : result){
-        if(list.size()) std::cout << "[";
+        std::cout << "[";
         for(auto &node : list) {
             std::cout << node->value;
         }
-        if(list.size()) std::cout << "]\n\n";
+        std::cout << "]\n\n";
     }
 }
