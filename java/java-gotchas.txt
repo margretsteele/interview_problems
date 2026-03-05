@@ -1,0 +1,111 @@
+C++ to Java Gotchas
+====================
+
+TYPES & PRIMITIVES
+- int, char, boolean are primitives — can't use in generics
+- Use wrapper classes for generics: Integer, Character, Boolean, Double
+- No unsigned types in Java
+- boolean not bool
+- String is a class, not std::string
+- No auto keyword (pre-Java 10) — use var in Java 10+
+
+ARRAYS
+- arr.length — no parentheses, it's a field
+- String.length() — with parentheses, it's a method
+- list.size() — for collections
+- No [] operator on HashMap — use .get() / .put()
+- new int[] required for inline array creation in assignments
+- 2D arrays: arr[i][j] not arr[i,j]
+
+STRINGS
+- Strings are immutable — use StringBuilder for loops
+- s.charAt(i) not s[i]
+- s.length() with parentheses
+- s.toCharArray() to get a char[]
+- new String(charArray) to go back
+- s.substring(start, end) — end is exclusive
+- s.equals(other) not s == other for comparison
+- "string" is a String, 'c' is a char — never interchangeable
+
+EQUALITY
+- == compares references for objects, not values
+- Always use .equals() for String, Integer, Character, etc.
+- Primitives (int, char, boolean) are fine with ==
+- Autoboxed values (Integer) may cache -128 to 127, making == work sometimes — don't rely on it
+
+COLLECTIONS (vs STL)
+- ArrayList<T>       -> std::vector<T>
+- HashMap<K,V>       -> std::unordered_map<K,V>
+- HashSet<T>         -> std::unordered_set<T>
+- TreeMap<K,V>       -> std::map<K,V>
+- LinkedList<T>      -> std::list<T>
+- ArrayDeque<T>      -> std::deque<T>
+- Stack<T> exists but ArrayDeque is preferred
+- PriorityQueue<T>   -> std::priority_queue<T> (but min-heap by default, not max)
+
+HASHMAP
+- .put(k, v) not map[k] = v
+- .get(k) not map[k]
+- .containsKey(k) not .count(k) or .find(k)
+- .getOrDefault(k, default) — no equivalent in C++
+- .computeIfAbsent(k, func) — creates if missing
+- Returns null if key not found, not undefined behavior
+
+MEMORY
+- No pointers, no *, no &, no ->
+- Everything is a reference (except primitives)
+- No delete, no destructors — garbage collected
+- No stack vs heap choice — objects always on heap
+- No RAII — use try-with-resources for cleanup
+
+OOP
+- Everything must be inside a class — no free functions
+- Single inheritance only (extends)
+- Multiple interfaces (implements)
+- All methods are virtual by default — use final to prevent override
+- No multiple inheritance — no diamond problem
+- this not this->
+- No header files — one class per file (convention)
+
+SYNTAX
+- No :: scope resolution — all dots
+- import not #include
+- No #define, no macros, no preprocessor
+- instanceof instead of dynamic_cast
+- No operator overloading (except + for strings)
+- final instead of const (but not the same — final means can't reassign, object contents can still change)
+- No const references or const methods
+- No default arguments — use method overloading instead
+- Semicolons required on every statement
+
+RESERVED WORDS THAT'LL BITE YOU
+- char — can't use as a variable name
+- int, long, short, byte, float, double — all reserved
+- null not nullptr
+- boolean not bool
+- extends not : for inheritance
+- super not Base::
+
+ERROR HANDLING
+- Checked exceptions — compiler forces you to handle them
+- try / catch / finally — finally always runs
+- try-with-resources — auto-closes Closeable objects
+- No RAII pattern — can't rely on scope exit
+
+ITERATION
+- Enhanced for: for (int x : arr) — like C++ range-based for
+- No iterators in the C++ sense — use for-each or Iterator<T>
+- for (Map.Entry<K,V> entry : map.entrySet())
+
+CASTING
+- (int) doubleVal — same as C-style cast
+- No static_cast, reinterpret_cast, const_cast
+- Integer.parseInt("123") — string to int
+- String.valueOf(123) — int to string
+- Autoboxing: int <-> Integer happens automatically (but watch out for null)
+
+NULL
+- NullPointerException is the Java equivalent of segfault
+- Collections can contain null
+- Autoboxing null to a primitive throws NullPointerException
+- Use Optional<T> to be explicit about nullable values
