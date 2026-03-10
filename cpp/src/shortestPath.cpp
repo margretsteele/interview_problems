@@ -86,7 +86,7 @@ int main() {
     };
     cout << "Test 1: " << shortestPath(grid1) << " (expected 4)" << endl;
 
-    // Test 2: no path
+    // Test 2: short path
     vector<vector<int>> grid2 = {
         {0, 1},
         {1, 0}
@@ -103,6 +103,14 @@ int main() {
         {0, 0}
     };
     cout << "Test 4: " << shortestPath(grid4) << " (expected -1)" << endl;
+
+    // Test 5: no path, surrounded by walls
+    vector<vector<int>> grid5 = {
+        {0, 1, 0},
+        {1, 1, 0},
+        {0, 0, 0}
+    };
+    cout << "Test 5: " << shortestPath(grid5) << " (expected -1)" << endl;
 
     return 0;
 }
