@@ -54,7 +54,6 @@ vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
     vector<int> currentPath;
     sort(candidates.begin(), candidates.end());
     updateResults(candidates, target, results, currentPath, 0);
-    // Your code here
     return results;
 }
 
